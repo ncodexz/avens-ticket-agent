@@ -19,8 +19,7 @@ from langgraph.types import interrupt, Command
 from langgraph.checkpoint.memory import MemorySaver
 
 from agent.propose_sql import propose_sql
-from agent.sql_executor import validate_select_only, build_in_memory_db, execute_query
-
+from agent.sql_executor import validate_select_only, execute_query
 
 class SQLApprovalState(TypedDict):
     ticket_text: str
@@ -57,8 +56,7 @@ def execute(state: SQLApprovalState) -> SQLApprovalState:
     if not state.get("approved"):
         return {**state, "result": None, "error": "Human rejected the query."}
 
-    conn = build_in_memory_db()
-    rows = execute_query(conn, state["proposal"]["sql"])
+    rows = execute_query(state["proposal"]["sql"])
     return {**state, "result": rows}
 
 
@@ -76,7 +74,11 @@ app = graph.compile(checkpointer=MemorySaver())
 
 if __name__ == "__main__":
     config = {"configurable": {"thread_id": "sql-approval-demo-1"}}
-    ticket_text = "El código local ES-4471 aparece sin mapeo asignado en el sistema."
+    ticket_text = """Missing contract CON_a496abb07de48cbc in Fleet Report - Wise Potato Industries SL
+
+    Good morning,
+    Sorry to bother you - I may be missing something, but I can't see contract CON_a496abb07de48cbc for Wise Potato Industries SL in the Fleet Report. Would you mind double-checking whether it should be there?
+    Many thanks in advance"""
 
     print("=== Running until interrupt ===")
     result = app.invoke({"ticket_text": ticket_text}, config=config)
