@@ -23,9 +23,21 @@ UC3 - Data Verification & Correction: missing dates, missing contract data,
 missing vehicle data, incorrect status information, data quality issues.
 """
 
+DISAMBIGUATION_RULE = """
+Disambiguation rule for UC2 vs UC3: if the ticket names ONE SPECIFIC
+record (a single contract code, vehicle code, customer, or similar
+identifier) that is missing or has incorrect data, classify it as UC3
+(Data Verification & Correction) even if the wording mentions a report.
+Classify as UC2 (Monthly Report Reconciliation) only when the ticket
+reports an AGGREGATE discrepancy — counts, totals, or summary numbers
+that don't match — without naming one specific record.
+"""
+
 PROMPT_TEMPLATE = """You are routing an Ayvens IT ticket to one of three use cases.
 
 {categories}
+
+{disambiguation}
 
 Ticket:
 {ticket_text}
@@ -41,7 +53,11 @@ MIN_CONFIDENCE_THRESHOLD = 0.5  # top score too low on its own — not enough si
 
 
 def route_b(ticket_text: str) -> dict:
-    prompt = PROMPT_TEMPLATE.format(categories=KNOWN_CATEGORIES, ticket_text=ticket_text)
+    prompt = PROMPT_TEMPLATE.format(
+        categories=KNOWN_CATEGORIES,
+        disambiguation=DISAMBIGUATION_RULE,
+        ticket_text=ticket_text,
+    )
     scores = chat_json(prompt)
 
     ranked = sorted(scores.items(), key=lambda item: item[1], reverse=True)
