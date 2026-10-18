@@ -1,0 +1,6 @@
+# Versiones fijadas con ==, las mismas que funcionaron en el proyecto anterior.
+databricks-sdk==0.153.0
+databricks-sql-connector==4.6.0
+python-dotenv==1.2.4
+requests==2.34.2
+pydantic==2.14.1

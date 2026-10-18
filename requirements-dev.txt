@@ -1,0 +1,3 @@
+-r requirements.txt
+# pytest: fijar con == al instalarlo (pip freeze) para no adivinar una version.
+pytest

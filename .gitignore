@@ -1,0 +1,11 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+runs/*
+!runs/README.md
+data/*
+!data/README.md
+!data/samples/
+export/
