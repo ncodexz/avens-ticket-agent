@@ -1,0 +1,22 @@
+{
+  "routing": {
+    "provider": "databricks",
+    "model": "databricks-gpt-oss-120b"
+  },
+  "embedding": {
+    "provider": "databricks",
+    "model": "databricks-gte-large-en"
+  },
+  "solving": {
+    "provider": "databricks",
+    "model": "databricks-gpt-oss-120b"
+  },
+  "extraction": {
+    "provider": "databricks",
+    "model": "databricks-gpt-oss-120b"
+  },
+  "choice": {
+    "provider": "databricks",
+    "model": "databricks-gpt-oss-120b"
+  }
+}
